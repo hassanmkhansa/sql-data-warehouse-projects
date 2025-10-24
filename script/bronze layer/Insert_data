@@ -3,11 +3,13 @@
 		a- crm
 			1- crm_cust_info
 			2- crm_prd_info
-			3- crm_prd_info
+			3- crm_sales_details
 		b- erp
 			1- erp_CUST_AZ12
 			2- erp_LOC_A101
-			3- PX_CAT_G1V2
+			3- erp_PX_CAT_G1V2
+	By using Stored Procedures 'bronze.load_bronze'
+	>>you can load the data by using this procedure and execute >'EXEC bronze.load_bronze'<
 
 	==> WARNING <==
 
@@ -15,82 +17,132 @@
     All data in this tables will be permanently deleted. Proceed with caution 
     and ensure you have proper backups before running this script.
 */
---============================================
--- insert data in tables come from crm source
---============================================
+CREATE OR ALTER PROCEDURE bronze.load_bronze AS
+BEGIN
+	DECLARE @start_time DATETIME , @end_time DATETIME , @batch_start_time DATETIME, @batch_end_time DATETIME
+	BEGIN TRY
+	SET @batch_start_time = GETDATE();
+	print'============================================';
+	print 'Loading Bronze Layer';
+	print'============================================';
 
---drop the data in the table 'crm_cust_info'
-TRUNCATE TABLE bronze.crm_cust_info;
+	print'=============================================';
+	print'1- insert data in tables come from crm source';
+	print'=============================================';
 
--- insert the new data int the table 'crm_cust_info'
-BULK INSERT bronze.crm_cust_info
-FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
-WITH (
-	FIRSTROW = 2,
-	FIELDTERMINATOR = ',',
-	TABLOCK
-);
+	SET @start_time = GETDATE();
+	print'>> Drop the data in the table crm_cust_info';
+	TRUNCATE TABLE bronze.crm_cust_info;
 
---drop the data in the table 'crm_prd_info'
-TRUNCATE TABLE bronze.crm_prd_info;
+	print'>> Insert the new data int the table crm_cust_info';
+	BULK INSERT bronze.crm_cust_info
+	FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
+	WITH (
+		FIRSTROW = 2,
+		FIELDTERMINATOR = ',',
+		TABLOCK
+	);
+	SET @end_time = GETDATE();
+	PRINT'>> LOAD Duration: ' + CAST (DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+	print'---------';
 
--- insert the new data int the table 'crm_prd_info'
-BULK INSERT bronze.crm_prd_info
-FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\prd_info.csv'
-WITH (
-	FIRSTROW = 2,
-	FIELDTERMINATOR = ',',
-	TABLOCK
-);
+	SET @start_time = GETDATE();
+	print'>> Drop the data in the table crm_prd_info';
+	TRUNCATE TABLE bronze.crm_prd_info;
 
---drop the data in the table 'crm_sales_details'
-TRUNCATE TABLE bronze.crm_sales_details;
+	print'>> Insert the new data int the table crm_prd_info';
+	BULK INSERT bronze.crm_prd_info
+	FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\prd_info.csv'
+	WITH (
+		FIRSTROW = 2,
+		FIELDTERMINATOR = ',',
+		TABLOCK
+	);
+	SET @end_time = GETDATE();
+	PRINT'>> LOAD Duration: ' + CAST (DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+	print'---------';
 
--- insert the new data int the table 'crm_sales_details'
-BULK INSERT bronze.crm_sales_details
-FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\sales_details.csv'
-WITH (
-	FIRSTROW = 2,
-	FIELDTERMINATOR = ',',
-	TABLOCK
-);
+	SET @start_time = GETDATE();
+	print'>> Drop the data in the table crm_sales_details';
+	TRUNCATE TABLE bronze.crm_sales_details;
 
---============================================
--- insert data in tables come from erp source
---============================================
+	print'>> Insert the new data int the table crm_sales_details';
+	BULK INSERT bronze.crm_sales_details
+	FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\sales_details.csv'
+	WITH (
+		FIRSTROW = 2,
+		FIELDTERMINATOR = ',',
+		TABLOCK
+	);
+	SET @end_time = GETDATE();
+	PRINT'>> LOAD Duration: ' + CAST (DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+	
 
---drop the data in the table 'erp_CUST_AZ12'
-TRUNCATE TABLE bronze.erp_CUST_AZ12;
+	print'=============================================';
+	print'2- insert data in tables come from erp source';
+	print'=============================================';
 
--- insert the new data int the table 'erp_CUST_AZ12'
-BULK INSERT bronze.erp_CUST_AZ12
-FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
-WITH (
-	FIRSTROW = 2,
-	FIELDTERMINATOR = ',',
-	TABLOCK
-);
+	SET @start_time = GETDATE();
+	print'>> Drop the data in the table erp_CUST_AZ12';
+	TRUNCATE TABLE bronze.erp_CUST_AZ12;
 
---drop the data in the table 'erp_LOC_A101'
-TRUNCATE TABLE bronze.erp_LOC_A101;
+	print'>> Insert the new data int the table erp_CUST_AZ12';
+	BULK INSERT bronze.erp_CUST_AZ12
+	FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
+	WITH (
+		FIRSTROW = 2,
+		FIELDTERMINATOR = ',',
+		TABLOCK
+	);
+	SET @end_time = GETDATE();
+	PRINT'>> LOAD Duration: ' + CAST (DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+	print'---------';
 
--- insert the new data int the table 'erp_LOC_A101'
-BULK INSERT bronze.erp_LOC_A101
-FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
-WITH (
-	FIRSTROW = 2,
-	FIELDTERMINATOR = ',',
-	TABLOCK
-);
+	SET @start_time = GETDATE();
+	print'>> Drop the data in the table erp_LOC_A101';
+	TRUNCATE TABLE bronze.erp_LOC_A101;
 
---drop the data in the table 'erp_PX_CAT_G1V2'
-TRUNCATE TABLE bronze.erp_PX_CAT_G1V2;
+	print'>> Insert the new data int the table erp_LOC_A101';
+	BULK INSERT bronze.erp_LOC_A101
+	FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
+	WITH (
+		FIRSTROW = 2,
+		FIELDTERMINATOR = ',',
+		TABLOCK
+	);
+	SET @end_time = GETDATE();
+	PRINT'>> LOAD Duration: ' + CAST (DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+	print'---------';
 
--- insert the new data int the table 'erp_PX_CAT_G1V2'
-BULK INSERT bronze.erp_PX_CAT_G1V2
-FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
-WITH (
-	FIRSTROW = 2,
-	FIELDTERMINATOR = ',',
-	TABLOCK
-);
+	SET @start_time = GETDATE();
+	print'>> Drop the data in the table erp_PX_CAT_G1V2';
+	TRUNCATE TABLE bronze.erp_PX_CAT_G1V2;
+
+	print'>> Insert the new data int the table erp_PX_CAT_G1V2';
+	BULK INSERT bronze.erp_PX_CAT_G1V2
+	FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
+	WITH (
+		FIRSTROW = 2,
+		FIELDTERMINATOR = ',',
+		TABLOCK
+	);
+	SET @end_time = GETDATE();
+	PRINT'>> LOAD Duration: ' + CAST (DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+	print'---------';
+	SET @batch_end_time = GETDATE()
+
+	print'=============================================';
+	PRINT'Loading Bronze Layer is Completed'
+	PRINT' -- LOAD BATCH Duration: ' + CAST (DATEDIFF(SECOND, @batch_start_time, @batch_end_time) AS NVARCHAR) + ' seconds';
+	print'=============================================';
+	END TRY
+	BEGIN CATCH
+	print'=============================================';
+	print'ERROR OCCURED DURING LOADING BRONZE LAYER';
+	print'ERROR MESSAGE' + ERROR_MESSAGE();
+	print'ERROR MESSAGE' + CAST(ERROR_NUMBER() AS NVARCHAR);
+	print'ERROR MESSAGE' + CAST(ERROR_STATE() AS NVARCHAR);
+	print'=============================================';
+	END CATCH
+END
+
