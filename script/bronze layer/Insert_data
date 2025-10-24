@@ -1,22 +1,27 @@
 /*
-	INSERT the data in thae tables depends on its sources table
-		a- crm
-			1- crm_cust_info
-			2- crm_prd_info
-			3- crm_sales_details
-		b- erp
-			1- erp_CUST_AZ12
-			2- erp_LOC_A101
-			3- erp_PX_CAT_G1V2
-	By using Stored Procedures 'bronze.load_bronze'
-	>>you can load the data by using this procedure and execute >'EXEC bronze.load_bronze'<
+=======================================================
+Stored Procedure: Load Bronze Layer (Source -> Bronze)
+=======================================================
+Script purpose:
+	This stored procedure loads data into the 'bronze' schema from external CSV files.
+	It performs the following actions:
+	- Truncates the bronze tables before loading data.
+	- Uses the BULK INSERT command to load data from csv Files to bronze tables.
 
+Parameters:
+	None.
+	This stored procedure does not accept any parameters or return any values.
+
+>> Usage Example:
+	EXEC bronze.load_bronze;
+========================================================
 	==> WARNING <==
 
     Running or execute this script will drop the entire data in this tables and insert the new data if it exists. 
     All data in this tables will be permanently deleted. Proceed with caution 
     and ensure you have proper backups before running this script.
 */
+
 CREATE OR ALTER PROCEDURE bronze.load_bronze AS
 BEGIN
 	DECLARE @start_time DATETIME , @end_time DATETIME , @batch_start_time DATETIME, @batch_end_time DATETIME
