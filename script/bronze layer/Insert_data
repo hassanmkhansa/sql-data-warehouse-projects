@@ -1,0 +1,96 @@
+/*
+	INSERT the data in thae tables depends on its sources table
+		a- crm
+			1- crm_cust_info
+			2- crm_prd_info
+			3- crm_prd_info
+		b- erp
+			1- erp_CUST_AZ12
+			2- erp_LOC_A101
+			3- PX_CAT_G1V2
+
+	==> WARNING <==
+
+    Running or execute this script will drop the entire data in this tables and insert the new data if it exists. 
+    All data in this tables will be permanently deleted. Proceed with caution 
+    and ensure you have proper backups before running this script.
+*/
+--============================================
+-- insert data in tables come from crm source
+--============================================
+
+--drop the data in the table 'crm_cust_info'
+TRUNCATE TABLE bronze.crm_cust_info;
+
+-- insert the new data int the table 'crm_cust_info'
+BULK INSERT bronze.crm_cust_info
+FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
+WITH (
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	TABLOCK
+);
+
+--drop the data in the table 'crm_prd_info'
+TRUNCATE TABLE bronze.crm_prd_info;
+
+-- insert the new data int the table 'crm_prd_info'
+BULK INSERT bronze.crm_prd_info
+FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\prd_info.csv'
+WITH (
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	TABLOCK
+);
+
+--drop the data in the table 'crm_sales_details'
+TRUNCATE TABLE bronze.crm_sales_details;
+
+-- insert the new data int the table 'crm_sales_details'
+BULK INSERT bronze.crm_sales_details
+FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_crm\sales_details.csv'
+WITH (
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	TABLOCK
+);
+
+--============================================
+-- insert data in tables come from erp source
+--============================================
+
+--drop the data in the table 'erp_CUST_AZ12'
+TRUNCATE TABLE bronze.erp_CUST_AZ12;
+
+-- insert the new data int the table 'erp_CUST_AZ12'
+BULK INSERT bronze.erp_CUST_AZ12
+FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
+WITH (
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	TABLOCK
+);
+
+--drop the data in the table 'erp_LOC_A101'
+TRUNCATE TABLE bronze.erp_LOC_A101;
+
+-- insert the new data int the table 'erp_LOC_A101'
+BULK INSERT bronze.erp_LOC_A101
+FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
+WITH (
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	TABLOCK
+);
+
+--drop the data in the table 'erp_PX_CAT_G1V2'
+TRUNCATE TABLE bronze.erp_PX_CAT_G1V2;
+
+-- insert the new data int the table 'erp_PX_CAT_G1V2'
+BULK INSERT bronze.erp_PX_CAT_G1V2
+FROM 'C:\sql\baraa\sql data warehouse project\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
+WITH (
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	TABLOCK
+);
